@@ -1,0 +1,39 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Install latest python3 and pip3
+    apt:
+      name: python3.12
+      name: python3-pip
+      update_cache: yes
+      state: latest
+ 
+  - name: Install javajdk
+    apt:
+      name: openjdk-11-jdk
+
+  - name: Install MariaDb Server
+    apt:
+      name: mariadb-server
+      state: latest
+
+  - name: Message of the Day
+    copy:
+      content: "Ansible Managed Node by hideki"
+      dest: /etc/motd
+
+  - name: use pip3 as default pip
+    shell: update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+  - name: use python3 as default python
+    shell: update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+
+  - name: User
+    user:
+     name: "carlo"
+     state: present
+     shell: /bin/bash
+     comment: "user is created"
+     createhome: yes
